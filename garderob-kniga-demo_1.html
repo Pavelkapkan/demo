@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Гардероб-книга — демо механизма</title>
+<style>
+:root{--bg:#fff;--surface:#F1F3F5;--stage:#E4E8EC;--ink:#20252B;--muted:#5A6672;--accent:#B8531F;--accent-text:#B8531F;--steel:#5A6672;--line:#D5DCE3;--on-accent:#fff;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161A1F;--surface:#20252B;--stage:#2B3C4D;--ink:#F1F3F5;--muted:#A9B4BE;--accent-text:#E8A878;--steel:#9FB0BE;--line:#37424D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161A1F;--surface:#20252B;--stage:#2B3C4D;--ink:#F1F3F5;--muted:#A9B4BE;--accent-text:#E8A878;--steel:#9FB0BE;--line:#37424D;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:17px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 28px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--accent-text);margin:0 0 10px}
+h1{font-family:Cambria,Georgia,serif;font-size:clamp(34px,7vw,56px);line-height:1.08;margin:0 0 14px}
+.lead{font-size:clamp(18px,3vw,22px);color:var(--muted);max-width:640px;margin:0 0 28px}
+.card{background:var(--surface);border-radius:18px;padding:18px}
+.seg{display:inline-flex;gap:4px;background:var(--stage);padding:4px;border-radius:999px;margin-bottom:14px}
+.seg button{border:0;background:none;color:var(--ink);font:inherit;font-weight:700;font-size:15px;padding:8px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.stage{background:var(--stage);border-radius:14px;overflow:hidden}
+svg{display:block;width:100%;height:auto}
+.shirt{cursor:pointer}
+.shirt rect{stroke:rgba(0,0,0,.25);stroke-width:1;transition:stroke .2s}
+.shirt.on rect{stroke:var(--accent-text);stroke-width:3}
+.tray{fill:var(--steel)}
+.say{min-height:3.2em;margin:14px 2px 10px;font-size:18px}
+.lv{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lv span{color:var(--muted);font-size:15px;margin-right:4px}
+.lv button{width:46px;height:46px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-weight:700;font-size:18px;cursor:pointer}
+.lv button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+button:focus-visible{outline:3px solid var(--accent-text);outline-offset:2px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:28px 0}
+.fact b{display:block;font-family:Cambria,Georgia,serif;font-size:34px;line-height:1.1;color:var(--accent-text)}
+.fact span{color:var(--muted);font-size:15px}
+footer{color:var(--muted);font-size:14px;padding-top:6px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="eyebrow">МНОГОУРОВНЕВАЯ СИСТЕМА ХРАНЕНИЯ</p>
+  <h1>Гардероб-книга</h1>
+  <p class="lead">Достаньте нижнюю футболку, не разбирая всю стопку. Попробуйте сами: выберите любой уровень.</p>
+
+  <section class="card" aria-label="Интерактивная демонстрация">
+    <div class="seg" role="group" aria-label="Режим">
+      <button id="m-book" aria-pressed="true">Гардероб-книга</button>
+      <button id="m-stack" aria-pressed="false">Обычная стопка</button>
+    </div>
+    <div class="stage">
+      <svg id="svg" viewBox="0 -70 680 490" role="img" aria-label="Схема шести уровней хранения, вид сбоку"></svg>
+    </div>
+    <p class="say" id="say" aria-live="polite"></p>
+    <div class="lv" id="lv"><span>Уровень:</span></div>
+  </section>
+
+  <section class="facts" aria-label="Ключевые цифры">
+    <div class="card fact"><b>6</b><span>уровней: 5 подвижных лотков и основание</span></div>
+    <div class="card fact"><b>300×300 мм</b><span>формат под стандартные шкафы</span></div>
+    <div class="card fact"><b>375 ₽</b><span>переменная себестоимость комплекта</span></div>
+    <div class="card fact"><b>8-й месяц</b><span>окупаемость проекта</span></div>
+  </section>
+  <footer>Питч для Новосталь-М · Бессварная модульная технология</footer>
+</main>
+
+<script>
+(function(){
+var NS="http://www.w3.org/2000/svg",HX=170,LIFT=34,H=22,T=6,G=8,BASE=376;
+var COL=["#6B7F5E","#2F4A66","#B8531F","#E4DCC8","#5A6672","#C9A27A"],TXT=["#fff","#fff","#fff","#20252B","#fff","#20252B"];
+var OFF=[0,[40,0,-7],[75,0,6],[20,0,-9],[85,0,8],[50,0,-5]];
+var S={mode:"book",sel:null,t:0,e:0},token=0,svg=document.getElementById("svg");
+var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function top(j){return BASE-H-j*(H+T+G)}
+function ty(j){return top(j-1)-G-T}
+function hy(j){return ty(j)+T/2}
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e}
+var post=el("line",{x1:HX-6,x2:HX-6,y1:BASE,y2:top(5)-24,stroke:"var(--steel)","stroke-width":4,"stroke-linecap":"round"});
+el("rect",{x:HX-14,y:BASE,width:430,height:14,rx:4,fill:"var(--steel)"});
+var shirts=[],trays=[];
+for(var j=0;j<6;j++){
+  if(j>0){var tg=el("g",{});el("rect",{x:HX-6,y:ty(j),width:416,height:T,rx:3,class:"tray"},tg);el("circle",{cx:HX-6,cy:hy(j),r:5,fill:"var(--accent-text)"},tg);trays[j]=tg}
+  var g=el("g",{class:"shirt",tabindex:0,role:"button","aria-label":"Уровень "+(j+1)});
+  el("rect",{x:HX+12,y:top(j),width:380,height:H,rx:6,fill:COL[j]},g);
+  var tx=el("text",{x:HX+28,y:top(j)+18,fill:TXT[j],"font-size":15,"font-weight":700,"font-family":"Calibri,Arial,sans-serif"},g);tx.textContent="Уровень "+(j+1);
+  (function(k){g.addEventListener("click",function(){pick(k)});g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(k)}})})(j);
+  shirts[j]=g;
+}
+var lv=document.getElementById("lv"),btns=[];
+for(var i=0;i<6;i++)(function(k){var b=document.createElement("button");b.textContent=k+1;b.setAttribute("aria-label","Уровень "+(k+1));b.onclick=function(){pick(k)};lv.appendChild(b);btns.push(b)})(i);
+
+function tf(j,shirt){
+  if(S.sel===null)return S.mode==="stack"&&shirt?"translate(0 "+j*14+")":"";
+  var above=j>S.sel;
+  if(S.mode==="book"){
+    if(above)return"rotate("+(-LIFT*S.t)+" "+(HX-6)+" "+hy(j)+")";
+  }else if(shirt&&above){
+    var o=OFF[j],r=j-S.sel;
+    return"translate("+o[0]*S.t+" "+(-30-36*r)*S.t+") rotate("+o[2]*S.t+" "+(HX+200)+" "+(top(j)+j*14+11)+") translate(0 "+j*14+")";
+  }
+  if(shirt&&j===S.sel)return"translate("+95*S.e+" "+(S.mode==="stack"?j*14:0)+")";
+  return S.mode==="stack"&&shirt?"translate(0 "+j*14+")":"";
+}
+function draw(){
+  var book=S.mode==="book";
+  post.style.display=book?"":"none";
+  for(var j=0;j<6;j++){
+    shirts[j].setAttribute("transform",tf(j,true));
+    shirts[j].classList.toggle("on",S.sel===j&&S.e>0.5);
+    if(trays[j]){trays[j].style.display=book?"":"none";trays[j].setAttribute("transform",tf(j,false))}
+    btns[j].setAttribute("aria-pressed",S.sel===j?"true":"false");
+  }
+}
+function say(){
+  var s=document.getElementById("say"),k=S.sel,n=5-(k===null?0:k),b=S.mode==="book";
+  if(k===null)s.textContent=b?"Нажмите на любой уровень, например на самый нижний.":"Так выглядит обычная стопка. Попробуйте достать нижнюю вещь.";
+  else if(b)s.textContent=k===5?"Верхний уровень доступен сразу, ничего поднимать не нужно.":"Верхние уровни ("+n+") поднялись единым блоком. Вещь уровня "+(k+1)+" достаётся одним движением, порядок сохранён.";
+  else s.textContent=k===5?"Верхнюю вещь достать легко, но каждая следующая потребует разбирать стопку.":"Чтобы достать вещь уровня "+(k+1)+", пришлось снять и разворошить вещей сверху: "+n+". Потом всё придётся перекладывать заново.";
+}
+function tw(p,to,ms){return new Promise(function(res){
+  var from=S[p],t0=performance.now(),my=token;ms=reduce?0:ms;
+  (function f(now){
+    if(my!==token)return res();
+    var k=ms?Math.min(1,(now-t0)/ms):1,e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    S[p]=from+(to-from)*e;draw();
+    if(k<1)requestAnimationFrame(f);else res();
+  })(t0);
+})}
+async function pick(k){
+  var my=++token;
+  if(S.sel===k&&S.e===1){
+    await tw("e",0,450);if(my!==token)return;await tw("t",0,600);if(my!==token)return;
+    S.sel=null;draw();say();return;
+  }
+  if(S.sel!==null){await tw("e",0,300);if(my!==token)return;await tw("t",0,400);if(my!==token)return}
+  S.sel=k;say();draw();
+  await tw("t",1,750);if(my!==token)return;
+  await tw("e",1,550);
+}
+function setMode(m){
+  var k=S.sel;token++;S.mode=m;S.sel=null;S.t=0;S.e=0;
+  document.getElementById("m-book").setAttribute("aria-pressed",m==="book");
+  document.getElementById("m-stack").setAttribute("aria-pressed",m==="stack");
+  draw();say();if(k!==null)pick(k);
+}
+document.getElementById("m-book").onclick=function(){setMode("book")};
+document.getElementById("m-stack").onclick=function(){setMode("stack")};
+draw();say();
+setTimeout(function(){if(S.sel===null&&token===0)pick(0)},900);
+})();
+</script>
+</body>
+</html>
